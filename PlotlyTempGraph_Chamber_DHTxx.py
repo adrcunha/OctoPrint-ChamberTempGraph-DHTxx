@@ -43,6 +43,9 @@ class DHTChamberTemp(octoprint.plugin.StartupPlugin, octoprint.plugin.RestartNee
 		return parsed_temps
 
 __plugin_name__ = "Chamber Temperature"
+__plugin_author__ = "Adriano Cunha"
+__plugin_description__ = "Provides chamber temperature in the 'Temperature' tab using a DHTxx sensor."
+__plugin_url__ = "https://github.com/adrcunha/OctoPrint-ChamberTempGraph-DHTxx"
 __plugin_pythoncompat__ = ">=2.7,<4"
 __plugin_version__ = "0.0.1"
 __plugin_implementation__ = DHTChamberTemp()

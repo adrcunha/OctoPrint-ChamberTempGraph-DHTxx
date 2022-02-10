@@ -11,24 +11,24 @@ import Adafruit_DHT
 # pin defined by the PIN constant below.
 #
 # Based on https://github.com/jneilliii/OctoPrint-PlotlyTempGraph/blob/master/klipper_additional_temp.py
-# Requiresw https://github.com/adafruit/Adafruit_Python_DHT
+# Requires https://github.com/adafruit/Adafruit_Python_DHT
 #
 # Setup:
-# - hardware: https://learn.adafruit.com/dht/connecting-to-a-dhtxx-sensor
+# - Hardware: https://learn.adafruit.com/dht/connecting-to-a-dhtxx-sensor
 # - Raspberry Pi: sudo pip3 install Adafruit_DHT
 # - Octoprint: upload this file through Plugin Manager > Get More > ...from URL
 #
 
 # GPIO pin connected to DHTXX data pin
 GPIO = 23
-SENSOR = Adafruit_DHT.DHT11
+SENSOR = Adafruit_DHT.DHT22
 
 
 class DHTEnclosureTemp(octoprint.plugin.StartupPlugin, octoprint.plugin.RestartNeedingPlugin):
 	def __init__(self):
 		self.last_dht_temp = dict()
-		# Be on the safe side (because of clones) and only sample DHTXX every 2 seconds.
-		octoprint.util.RepeatedTimer(2.0, self.sample_dht).start()
+		# Be on the safe side (because of clones) and only sample DHTXX every 3 seconds.
+		octoprint.util.RepeatedTimer(3.0, self.sample_dht).start()
 
 	def sample_dht(self):
 		# Read quickly as possible, skip if error (temperature won't update in the graph)

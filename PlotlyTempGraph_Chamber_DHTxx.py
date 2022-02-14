@@ -2,6 +2,7 @@
 from __future__ import absolute_import
 import octoprint.plugin
 import octoprint.util
+import copy
 import Adafruit_DHT
 
 #
@@ -39,8 +40,9 @@ class DHTChamberTemp(octoprint.plugin.StartupPlugin, octoprint.plugin.RestartNee
 			self.last_dht_temp["Chamber"] = (temperature, None)
 
 	def dht_temp_callback(self, comm, parsed_temps):
-		parsed_temps.update(self.last_dht_temp)
-		return parsed_temps
+                t = copy.deepcopy(parsed_temps)
+                t.update(self.last_dht_temp)
+                return t
 
 __plugin_name__ = "Chamber Temperature"
 __plugin_author__ = "Adriano Cunha"

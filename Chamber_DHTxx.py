@@ -6,12 +6,17 @@ import copy
 import Adafruit_DHT
 
 #
-# Plot chamber temperature in the standard "Temperature" tab.
+# Plot chamber temperature in the "Temperature" tab.
 #
 # Chamber temperature is measured by a DHT11/DHT22 sensor conhected to the GPIO
 # pin defined by the PIN constant below.
 #
-# In your printer profile, "Heated Chamber" in "Print bed & build volume" must be checked.
+# Standard "Temperature" tab:
+# - In your printer profile, "Heated Chamber" in "Print bed & build volume" must be checked.
+#
+# OctoPrint-PlotlyTempGraph plugin:
+# - In the Name Mapping, select name "C", set any label you want.
+#   NOTE: As of 2/2022, PlotlyTempGraph is incompatible with TouchUI plugin.
 #
 # Based on https://github.com/jneilliii/OctoPrint-PlotlyTempGraph/blob/master/klipper_additional_temp.py
 # Requires https://github.com/adafruit/Adafruit_Python_DHT

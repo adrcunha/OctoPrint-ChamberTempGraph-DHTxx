@@ -34,20 +34,31 @@ SENSOR = Adafruit_DHT.DHT22
 
 class DHTChamberTemp(octoprint.plugin.StartupPlugin, octoprint.plugin.RestartNeedingPlugin):
 	def __init__(self):
-		self.last_dht_temp = dict()
+		self.last_dht_temp = None
+		self.platform = Adafruit_DHT.common.get_platform() # Only do it once for speed sake.
 		# Be on the safe side (because of clones) and only sample DHTXX every 3 seconds.
 		octoprint.util.RepeatedTimer(3.0, self.sample_dht).start()
 
 	def sample_dht(self):
-		# Read quickly as possible, skip if error (temperature won't update in the graph)
-		humidity, temperature = Adafruit_DHT.read(SENSOR, GPIO)
-		if humidity is not None and temperature is not None:
-			self.last_dht_temp["C"] = (temperature, None)
+		try:
+			humidity, temperature = Adafruit_DHT.read(SENSOR, GPIO, self.platform)
+			# Skip if error (it's fine, the temperature just won't update in the graph)
+			if humidity is None or temperature is None:
+				return
+			# Ignore subtle drops in temperature.
+			# https://github.com/adafruit/Adafruit_Python_DHT/blob/master/Adafruit_DHT/common.py#L65
+			if self.last_dht_temp and temperature - self.last_dht_temp <= -2:
+				return
+			self.last_dht_temp = temperature
+		except:
+			pass
 
 	def dht_temp_callback(self, comm, parsed_temps):
-                t = copy.deepcopy(parsed_temps)
-                t.update(self.last_dht_temp)
-                return t
+		t = copy.deepcopy(parsed_temps)
+		if self.last_dht_temp:
+			t.update({ "C": (self.last_dht_temp, None) })
+		return t
+
 
 __plugin_name__ = "Chamber Temperature"
 __plugin_author__ = "Adriano Cunha"
